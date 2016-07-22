@@ -1,0 +1,36 @@
+#!/bin/bash -e
+
+echocol() { echo -e "\033[31m$@...\033[0m " >&2; }
+
+echocol "Setup dirs"
+
+tempdir=$(mktemp -d /tmp/tm-XXXXXXXXX) || exit 1
+
+mkdir -p $tempdir/dist
+mkdir -p ./vendor
+
+echocol "Vendorizing [begin]"
+if [ ! -d ./vendor/bs4 ]; then
+	echocol "Getting Beautiful Soup"
+	curl -sL https://www.crummy.com/software/BeautifulSoup/bs4/download/4.5/beautifulsoup4-4.5.0.tar.gz | tar -C ./vendor --strip 1 --wildcards -zxvf - '*/bs4'
+fi
+echocol "Vendorizing [end]"
+
+echocol "Copying source files to dist"
+
+cp -rv ./soglia-consip/__main__.py $tempdir/dist
+cp -rv ./vendor/* $tempdir/dist
+
+echocol "Compiling and removing source files"
+
+( cd $tempdir/dist; python -m compileall . )
+find $tempdir/dist -name client -prune -o -name \*.py -exec rm {} \;
+
+echocol "Preparing zip file"
+
+( cd $tempdir/dist;  zip -9r $tempdir/soglia_consip.zip . )
+echo '#!/usr/bin/env python' > $(pwd)/soglia_consip
+cat $tempdir/soglia_consip.zip >> $(pwd)/soglia_consip
+chmod u+rx $(pwd)/soglia_consip
+
+rm -rf $tempdir
