@@ -18,7 +18,7 @@ echocol "Vendorizing [end]"
 
 echocol "Copying source files to dist"
 
-cp -rv ./soglia-consip/__main__.py $tempdir/dist
+cp -rv ./soglie-consip/__main__.py $tempdir/dist
 cp -rv ./vendor/* $tempdir/dist
 
 echocol "Compiling and removing source files"
@@ -28,9 +28,9 @@ find $tempdir/dist -name client -prune -o -name \*.py -exec rm {} \;
 
 echocol "Preparing zip file"
 
-( cd $tempdir/dist;  zip -9r $tempdir/soglia_consip.zip . )
-echo '#!/usr/bin/env python' > $(pwd)/soglia_consip
-cat $tempdir/soglia_consip.zip >> $(pwd)/soglia_consip
-chmod u+rx $(pwd)/soglia_consip
+( cd $tempdir/dist;  zip -9r $tempdir/soglie_consip.zip . )
+echo '#!/usr/bin/env python' > $(pwd)/soglie_consip
+cat $tempdir/soglie_consip.zip >> $(pwd)/soglie_consip
+chmod u+rx $(pwd)/soglie_consip
 
 rm -rf $tempdir

@@ -1,5 +1,6 @@
 from urllib import urlopen
 from re import sub
+from sys import exit
 
 from bs4 import BeautifulSoup
 
@@ -11,7 +12,11 @@ def clean(e):
 data = urlopen( URL ).read()
 soup = BeautifulSoup(data, 'html.parser')
 
-info, _, traffico = soup.find_all('table')[:3]
+try:
+	info, _, traffico = soup.find_all('table')[:3]
+except ValueError:
+	exit('soglie_consip: errore di esecuzione, potresti non essere sotto rete tre')
+
 
 linea, contratto = info.find_all('tr')[:2]
 print u'\t'.join( map( clean, linea.find_all('td') ) )
