@@ -15,7 +15,7 @@ soup = BeautifulSoup(data, 'html.parser')
 try:
 	info, _, traffico = soup.find_all('table')[:3]
 except ValueError:
-	exit('soglie_consip: errore di esecuzione, potresti non essere sotto rete tre')
+	exit('soglie_consip: errore di esecuzione, potresti non essere sotto rete TIM/Consip')	
 
 
 linea, contratto = info.find_all('tr')[:2]
