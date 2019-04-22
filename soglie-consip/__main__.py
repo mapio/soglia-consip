@@ -1,5 +1,6 @@
 from urllib import urlopen
 from re import sub
+import ssl
 from sys import exit
 
 from bs4 import BeautifulSoup
@@ -9,7 +10,7 @@ URL = 'https://www.timinternet.it/timmobile/private/wp.do'
 def clean(e):
 	return sub( r'<[^>]+>', '', u' '.join(map(lambda _: unicode(_).strip(), e.contents)))
 
-data = urlopen( URL ).read()
+data = urlopen( URL, context = ssl._create_unverified_context() ).read()
 soup = BeautifulSoup(data, 'html.parser')
 
 try:
